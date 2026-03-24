@@ -1,15 +1,234 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://sandbox.src.mastercard.com/sdk/srcsdk.mastercard.js"></script>
     <script
         src="https://sandbox.src.mastercard.com/srci/integration/2/lib.js?srcDpaId=c7f83380-d28f-4025-aee7-96e54f9b5cae&locale=en_US">
         </script>
-    <title>Document</title>
+    <script>
+        function enableCardText() {
+            document.getElementById('CardNumEM').disabled = false;
+        }
+    </script>
+
+    <!-- <script>
+
+        const root = document.querySelector('src-otp-input');
+        root.style.setProperty('--src-input-error-color', 'blue');
+        root.style.setProperty('--src-btn-bg-color', 'green');
+        root.style.setProperty('--src-btn-text-color', 'orange');
+        root.style.setProperty('--src-btn-disabled-bg-color', 'navy');
+        root.style.setProperty('--src-btn-border-radius', '0px');
+        root.style.setProperty('--src-btn-height', '48px'); // Modifying this variable for this component may impact the styling of other components.
+        root.style.setProperty('--src-btn-width', '279px'); // Modifying this variable for this component may impact the styling of other components.
+        root.style.setProperty('--src-btn-borders', '2px solid orange');
+        root.style.setProperty('--src-btn-dancing-dot-color', 'pink');
+    </script> -->
+
+    <script type="module"
+        src="https://src.mastercard.com/srci/integration/components/src-ui-kit/src-ui-kit.esm.js"></script>
+    <link rel="stylesheet" href="https://src.mastercard.com/srci/integration/components/src-ui-kit/src-ui-kit.css">
+
+    <title>Click to Pay</title>
+    <link href="/click2PaySinglePayload/css/app.css" rel="stylesheet" />
 </head>
+
 <body>
-    <h1>Hello</h1>
+
+    <!-- <src-otp-input network-id="mastercard" masked-identity-value="w***g@mail.com">
+    </src-otp-input> -->
+    <!-- Tab links -->
+    <div class="tab">
+        <button class="tablinks" onclick="openCity(event, 'recognizedUser')">Recognized user</button>
+        <button class="tablinks" onclick="openCity(event, 'recognizedUserEM')">Recognized user - email/mobile</button>
+        <button class="tablinks" onclick="openCity(event, 'firstTimeUser')">First Time User</button>
+    </div>
+
+    <!-- Tab content -->
+    <div id="recognizedUser" class="tabcontent">
+        <h3>Recognized user</h3>
+
+<img src="click2PaySinglePayload/images/people.png" id="my-image" />
+
+<script>
+    const image = document.getElementById('my-image');
+
+    // Get the remote image as a Blob with the fetch API
+    fetch(image.src)
+        .then((res) => res.blob())
+        .then((blob) => {
+            // Read the Blob as DataURL using the FileReader API
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                console.log(reader.result);
+                // Logs data:image/jpeg;base64,wL2dvYWwgbW9yZ...
+
+                // Convert to Base64 string
+                const base64 = getBase64StringFromDataURL(reader.result);
+                console.log(base64);
+                // Logs wL2dvYWwgbW9yZ...
+            };
+            reader.readAsDataURL(blob);
+        });
+</script>
+
+
+        <div>
+            <!--h1 class="h3 mb-3 fw-normal">SDK initialization</h1-->
+            <button class="button" id="initSDKRecUSer" onclick="initHandlerCAM()">
+                Init
+            </button>
+        </div>
+        <div>
+
+
+
+            <button id="getCardNRecUser" class="button" onclick="getCardsHandler()">
+                GetCard
+            </button>
+            <src-card-list id="srcCardList" locale="en_US" card-brands="mastercard" display-cancel-option="true"
+                display-add-card="true" display-preferred-card="false" display-sign-out="false"
+                card-selection-type="gridView" src-digital-card-id="" display-header="true" unaccepted-card-type=""
+                background="default"> </src-card-list>
+            <!--  <div><input type="button" id="css-override" </div> -->
+            <div>
+
+                <input type="checkbox" id="dsrp" name="dynamicDataType">
+                <label for="accept"> DSRP </label>
+                <input type="checkbox" id="none" name="dynamicDataType">
+                <label for="accept"> None-FPAN </label>
+                <button id="checkoutRecUser" class="button" onclick="checkoutWithCardHandler()">
+                    CheckOut With Card
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="recognizedUserEM" class="tabcontent">
+        <h3>Recognized user - email/mobile</h3>
+        <div>
+            <button class="button" id="initSDKEM" onclick="initHandlerUserEM()">
+                Init
+            </button>
+        </div>
+
+        <div>
+            <button id="getCardEM" class="button" onclick="getCardsEM()">
+                Get Card
+            </button>
+        </div>
+
+        <div>
+            <button id="authentcateEM" class="button" onclick="authenticateUserEM()">
+                Authenticate
+            </button>
+
+
+            <br> <br>
+            <form>
+                <fieldset id="wrapperList"></fieldset>
+
+
+            </form>
+
+            <br> <br>
+
+        </div>
+    </div>
+
+    <ul id="myCardList"></ul>
+
+    <!-- <src-button id="srcButton" locale="pt_PT" width="" height="" theme="" card-brands=""></src-button>
+            <src-card-list id="srcCardList" locale="" card-brands="" display-cancel-option="" display-add-card="false"
+                display-preferred-card="false" display-sign-out="false" card-selection-type="gridView"
+                src-digital-card-id="NONE" display-header="" unaccepted-card-type="" background="default">
+            </src-card-list>
+            <div><input type="button" id="css-override" value="Enable CSS override"></div> -->
+
+    </div>
+    <div>
+        <br> <br>
+        <form>
+            <fieldset>
+                <legend>Checkout Payment Options - dynamicDataType </legend>
+
+                <input type="radio" id="dsrpEM" name="dynamicDataTypeEM" value="dsrpEM">
+                <label for="dsrpEM">DSRP</label><br>
+
+                <input type="radio" id="noneEM" name="dynamicDataTypeEM" value="NONE">
+                <label for="noneEM">None-FPAN</label><br>
+
+                <input type="radio" id="newCardEM" name="dynamicDataTypeEM" value="manualCardEM"
+                    onclick="enableCardText(this.value)">
+                <label for="newCardEM">Manual FPAN</label><br>
+
+                <label for="CardNumEM"> Card number </label>
+                <input type="text" id="CardNumEM" name="CardNumEM" disabled>
+                <br>
+            </fieldset>
+        </form>
+
+        <br> <br>
+        <button id="checkoutWithCardEM" class="button" onclick="checkoutEM()">
+            Checkout with Card
+        </button>
+    </div>
+    </div>
+
+    <div id="firstTimeUser" class="tabcontent">
+        <h3>New user</h3>
+        <div>
+            <button class="button" id="initSDKNewUser" onclick="initNewUser()">
+                Init
+            </button>
+        </div>
+
+        <div>
+            <button id="getCardNewUSer" class="button" onclick="getCardsNewUser()">
+                Get Card
+            </button>
+        </div>
+
+        <!-- <div>
+            <button id="idLookUpNewUSer" class="button" onclick="idLookupNewUser()">
+                ID Lookup
+            </button>
+        </div> -->
+
+
+        <div>
+            <button id="authenticateNewUSer" class="button" onclick="authenticateNewUser()">
+                Authenticate
+            </button>
+        </div>
+        <div>
+            <src-consent locale="en_US" card-brands="mastercard" display-remember-me="true"
+                dcf-supressed="true"></src-consent>
+            <p></p>
+            <div><input type="button" id="css-override" value="Enable CSS Override"></div>
+            <p></p>
+
+
+            <button id="encryptCardNewUSer" class="button" onclick="encryptCard()">
+                Encrypt Card
+            </button>
+        </div>
+
+        <div>
+            <button id="checkoutNewCard" class="button" onclick="checkoutWithNewCard()">
+                CheckOut with New Card
+            </button>
+        </div>
+    </div>
+
+    </main>
+    <script src="/click2PaySinglePayload/js/tab.js"></script>
+    <script src="/click2PaySinglePayload/js/ucsNewUser.js"></script>
+    <script src="/click2PaySinglePayload/js/ucsRecUser.js"></script>
+    <script src="/click2PaySinglePayload/js/ucsUserEmailMobile.js"></script>
 </body>
+
 </html>
