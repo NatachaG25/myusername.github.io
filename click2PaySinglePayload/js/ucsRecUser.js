@@ -1,5 +1,5 @@
 // window.mcCheckoutService.init //returns a promise which will:
-// // Resolve to an object containing availableCardBrands, e.g.:
+// // Resolve to an object containing availableCardBrands, e.g.: 
 // const brands = {
 //     "availableCardBrands": [
 //         "mastercard",
