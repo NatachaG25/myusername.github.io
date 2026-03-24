@@ -1,5 +1,5 @@
 
-var mcCheckoutService = new MastercardCheckoutServices();
+var mcCheckoutService = new MastercardCheckoutServices(); 
 var isNewCard = false;
 var cardNum = "";
 
