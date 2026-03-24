@@ -1,0 +1,81 @@
+{
+   "srcClientId": "31d7169f-82de-4836-88da-515f3c208148",
+   "srcCorrelationId": "AeCC42A6-34re-uy76-98uy-9a09CaCBceFd",
+   "srciTransactionId": "86bd4a91-po09-9iue-ase3-59eea3812f06",
+   "assuranceData": {
+      "verificationData": [
+         {
+            "verificationType": "CARDHOLDER",
+            "verificationEntity": "03",
+            "verificationMethod": "06",
+            "verificationResults": "01",
+            "verificationTimestamp": "1755853693",
+            "verificationEvents": [
+               "04"
+            ],
+            "additionalData": {
+               "accountReference": {
+                  "card": {
+                     "primaryAccountNumber": "5506900485473283",
+                     "panExpirationMonth": "06",
+                     "panExpirationYear": "2030"
+                  }
+               }
+            }
+         },
+         {
+            "verificationType": "CONSUMER",
+            "verificationEntity": "03",
+            "verificationMethod": "05",
+            "verificationResults": "01",
+            "verificationTimestamp": "1755853693",
+            "additionalData": {
+               "accountReference": {
+                  "consumerIdentity": {
+                     "identityProvider": "ABC Bank",
+                     "identityType": "EMAIL_ADDRESS",
+                     "identityValue": "natachagovan@gmail.com"
+                  }
+               }
+            }
+         }
+      ]
+   },
+   "authenticationMethod": {
+      "authenticationMethodType": "FIDO2",
+      "authenticationSubject": "CONSUMER",
+      "authenticator": {
+         "certifiedSolutionId": "20001",
+         "metadata": {
+            "fido2": {
+               "displayName": "n*****n@gmail.com"
+            }
+         }
+      }
+   },
+   "authenticationContext": {
+      "uriData": {
+         "uri": "https://webhook.site/aae0fedb-efd3-4deb-9a06-9da7d42a857a",
+         "uriType": "WEB_URI"
+      }
+   },
+   "complianceSettings": {
+      "complianceResources": [
+         {
+            "complianceType": "TERMS_OF_USE",
+            "uri": "https://www.mastercard.com/global/passkeys/en_us/terms-of-use.html",
+            "version": 1,
+            "datePublished": 1678294563,
+            "info": {
+               "languageText": "Sample Language Text",
+               "languageTextVersion": 1,
+               "locale": "en-AU",
+               "acceptedAt": 1678294563,
+               "ctaText": "Create Passkey",
+               "channel": "WEB",
+               "company": "Test Company"
+            }
+         }
+      ]
+   }
+}
